@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar.html" %}
+{% load static %}
+<!-- Service Start -->
+<div class="container-xxl py-5">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+      <h5 class="section-title ff-secondary text-center text-primary fw-normal">Fitur Kami</h5>
+      <h1 class="mb-5">Explore Fitur pada website</h1>
+    </div>
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-book text-primary mb-4"></i>
+                        <h5>Mang Wiki</h5>
+                        <p>Ketahui berbagai macam tentang mangrove, melalui pengetahuan kami</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-flag text-primary mb-4"></i>
+                        <h5>Identifikasi Lahan</h5>
+                        <p>Identifikasi Lahan yang Baik untuk Menanam Jenis Mangrove Tertentu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-newspaper text-primary mb-4"></i>
+                        <h5>Berita</h5>
+                        <p>Lihat beberapa berita terbatu tentang Mangrove, dari sumber berita terpercaya</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                <div class="service-item rounded pt-3">
+                    <div class="p-4">
+                        <i class="fa fa-3x fa-headset text-primary mb-4"></i>
+                        <h5>Identifikasi Mangrove</h5>
+                        <p>Identifikasi jenis mangrove berdasarkan foto yang anda masukkan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-top: 60px;" class="text-center wow fadeInUp" data-wow-delay="0.1s">
+        <h5 class="section-title ff-secondary text-center text-primary fw-normal">Persebaran Mangrove</h5>
+        <h1 class="mb-5">Lihat persebaran mangrove di dunia</h1>
+        <p>Zoom untuk pengalaman memuaskan</p>
+    </div>
+
+    <div id="map" style="width: 80%; margin-left: auto; margin-right: auto; height: 400px; border-radius: 10px; box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75);
+    -webkit-box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75);
+    -moz-box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75)">
+        <div id="loading" class="loading-container">
+            <h3 style="font-size: 15px;">Ini mungkin membutuhkan waktu beberapa saat</h3>
+            <img src="{% static 'img/loading.png' %}" class="loading-map">
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/geojson-vt@3.2.0/geojson-vt.js"></script>
+    <script src="{% static 'js/leaflet-geojson-vt.js' %}"></script>
+    <script src="https://dl.dropbox.com/scl/fi/l0o35fn8bz1kz3f07372y/mangrove.js?rlkey=iimn9cs7emw32fjdj24cytqe2&dl=0" async onload="initMap()"></script>
+    <script>
+
+        const hideLoading = () => {
+            document.getElementById('loading').style.display = "none"
+        }
+
+        const initMap = () => {
+            var map = L.map('map', {
+                center: [-3.035258, 113.326182],
+                zoom: 5,
+                scrollWheelZoom: false,
+            });
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var options = {
+                maxZoom: 16,
+                tolerance: 5,
+                debug: 0,
+                style: {
+                fillColor: "#1EB300",
+                color: "#F2FF00",
+                },
+            };
+            var vtLayer = L.geoJson.vt(mangrove, options).addTo(map);
+
+            hideLoading();
+        }    
+
+  
+    </script>
+</div>
+<!-- Service End -->
+{% endblock  %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh;" class="py-5">
+    <lottie-player style="width: 50%; margin-left: auto; margin-right: auto;" src="{% static 'lottie/404.json' %}" background="transparent" speed="1" class="lottie-404" loop autoplay></lottie-player>
+    <h3 style="text-align: center; font-family: 'Fredoka'; padding-bottom: 5px;">OOPS, Sepertinya halaman yang anda cari tidak ditemukan</h3>
+    <a href="{% url 'landing_page' %}" style="display: block; text-align: center; position: relative; z-index: 9; font-family: 'Fredoka'; font-size: large;">Kembali ke halaman utama</a>
+</div>
+{% endblock  %}

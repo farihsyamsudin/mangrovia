@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
+    <div class="navbar-brand p-0">
+        <h1 class="text-primary m-0"><i class="fa fa-tree me-3"></i>Mangrovia</h1>
+        <!-- <img src="img/logo.png" alt="Logo"> -->
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="fa fa-bars"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto py-0 pe-4">
+            <a href="{% url 'landing_page' %}" class="nav-item nav-link">Home</a>
+            <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
+            <a href="{% url 'page_berita' %}" class="nav-item nav-link">Berita</a>
+            <a href="{% url 'mang_wiki' %}" class="nav-item nav-link">Mang Wiki</a>
+            <a href="{% url 'predict_mangrove' %}" class="nav-item nav-link">Identifikasi Lahan</a>
+            <a href="{% url 'predict_mangrove_image' %}" class="nav-item nav-link">Identifikasi Jenis</a>
+        </div>
+    </div>
+</nav>

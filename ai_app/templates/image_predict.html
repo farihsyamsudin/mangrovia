@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% include "navbar_page.html" %}
+
+    <div class="text-center  container mb-5" >
+        <h5 data-wow-delay="0.1s" class="section-title ff-secondary wow fadeInUp text-center text-primary fw-normal">
+        Identifikasi Jenis Mangrove
+        </h5>
+        <h1 data-wow-delay="0.4s" class="wow fadeInUp">Cari tau jenis mangrove berdasarkan gambar yang anda punya</h1> <br> 
+        <p>Fitur masih dalam tahap pengembangan</p>
+    </div>
+
+    <div class="container">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <h6>Pilih gambar yang akan anda identifikasi :</h6>
+                <input name="gambar_mangrove" accept=".jpg, .png, .jpeg" type="file" class="form-control" id="inputGroupFile01">
+            </div>
+            <button class="btn btn-secondary">Predict!</button>
+        </form>
+    </div>
+
+
+    <br>
+
+    {% if hasil %}
+      Rekomendasi Jenis Mangrove : {{hasil}}
+    {% endif %}
+
+{% endblock %}

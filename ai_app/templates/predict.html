@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% include "navbar_page.html" %}
+<div class="container-xxl">
+    <div class="text-center  container mb-5" >
+        <h5 data-wow-delay="0.1s" class="section-title ff-secondary wow fadeInUp text-center text-primary fw-normal">
+        Identifikasi Lahan
+        </h5>
+        <h1 data-wow-delay="0.4s" class="wow fadeInUp">Cari tau mangrove jenis apa yang cocok untuk ditanam di lahan tertentu</h1>
+    </div>
+
+
+      
+
+    <div class="container">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Input By Parameter Lombok</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Input Manual</button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div id="peta" style="width: 80%; margin-top:20px; margin-left: auto; margin-right: auto; height: 400px; border-radius: 10px; box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75);
+                -webkit-box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75);
+                -moz-box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75)"></div>
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <label class="mt-2" for="sst">Suhu (°C) : </label>
+                    <input class="form-control" name="sst" id="sst" type="number">
+                    <br>
+                    <label class="mt-2" for="salinity">Salinitas (mg/l)</label>
+                    <input class="form-control" id="salinity" name="salinity" type="number">
+                    <br>
+                    <label class="mt-2" for="tss">Nilai Padatan (‰)</label>
+                    <input class="form-control" id="tss" name="tss" type="number">
+                    <br>
+                    <button class="btn btn-secondary" type="submit">Cek</button>
+                </form>
+            </div>
+        </div>
+
+        {% if hasil %}
+          <p id="hasil_prediksi" style="padding-top: 30px; text-indent: 15px;"></p>
+        {% endif %}
+
+    </div>
+</div>
+<script src="{% static 'js/mang.js' %}"></script>
+<script src="{% static 'js/mangrove.js' %}"></script>
+<script src="{% static 'js/param.js' %}"></script>
+<script src="{% static 'js/leaflet-providers.js' %}"></script>
+<script>
+    var peta = L.map('peta', {
+        center: [-8.604701407182281, 116.29901848124125],
+        zoom: 8.5,
+        scrollWheelZoom: false,
+    });
+      const tiles = L.tileLayer(
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          maxZoom: 19,
+          attribution:
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }
+      ).addTo(peta);
+
+      const parameter = L.layerGroup();
+
+      const getColorForGridCode = (gridCode) => {
+  
+        const colorMap = {
+          28: "#FF0000", // Warna untuk GridCode 28
+          29: "#FF0000", // Warna untuk GridCode 29
+          30: "#00FF00", // Warna untuk GridCode 30
+          31: "#00FF00", // Warna untuk GridCode 31
+          32: "#0000FF", // Warna untuk GridCode 32
+          33: "#0000FF", // Warna untuk GridCode 33
+        };
+
+        return colorMap[gridCode] || "#FFFFFF"; // Warna default: putih
+      };
+
+      L.geoJSON(param, {
+        style: function (feature) {
+          const gridCode = feature.properties.GridCode;
+          const color = getColorForGridCode(gridCode);
+
+          return {
+            color: color,
+          };
+        },
+        onEachFeature: function (feature, layer) {
+          layer.on("click", function (e) {
+            const gridCode = feature.properties.GridCode;
+            const color = getColorForGridCode(gridCode);
+
+            L.popup()
+              .setLatLng(e.latlng)
+              .setContent(
+                `
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input hidden value="${feature.properties.class}" name="sst"/><p>Suhu Permukaan Laut daerah ini : ${feature.properties.class}°C</p>
+                    <input hidden value="${feature.properties.salinity_2}" name="salinity"/><p>Salinitas daerah ini : ${feature.properties.salinity_2}mg/l</p>
+                    <input hidden value="${feature.properties.MPT}" name="tss"/><p>Padatan tersuspensi daerah ini : ${feature.properties.MPT}‰</p>
+                    <button class="btn btn-secondary" style="font-size:10px;">
+                        Prediksi Mangrove untuk daerah ini!
+                    </button>
+                </form>
+                `  
+              )
+              .openOn(peta);
+          });
+        },
+      }).addTo(parameter);
+      
+      
+      // const mangrove = L.layerGroup();
+      // L.geoJSON(mangrove, {color: '#54B435'}).addTo(mangrove);
+
+      var overlays = {
+        // " Mangrove": mangrove,
+        " Parameter": parameter
+      };
+
+      L.control.layers(overlays).addTo(peta);
+
+</script>
+
+{% if hasil %}
+  <script>
+    const summonSwalNotif = (title, text, icon) => {
+      Swal.fire({
+          title: title,
+          text: text,
+          icon: icon
+      });
+    }
+    let text_to_display = ""
+    let icon = ""
+    const jenis_mangrove = `{{hasil}}`
+
+    if (jenis_mangrove === "Tidak Cocok") {
+      text_to_display = `Tidak Ada Mangrove yang cocok ditanam di daerah sini`
+      icon = "error"
+    } else {
+      text_to_display = 
+        `
+        Mangrove yang cocok ditanam di tempat dengan Suhu Permukaan Laut {{input_data.sst}} °C, Salinitas {{input_data.salinity}}mg/l dan padatan tersuspensi sebesar {{input_data.tss}} adalah jenis mangrove {{hasil}}  
+        `
+      icon = "success"
+    }
+
+    summonSwalNotif("Hasil Analisis", text_to_display, icon)
+
+    document.getElementById("hasil_prediksi").innerHTML = text_to_display
+  </script>
+{% endif %}
+
+{% endblock %}

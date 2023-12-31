@@ -1,0 +1,20 @@
+{% load static %}
+<!-- Navbar & Hero Start -->
+<div class="container-xxl position-relative p-0" style="z-index: 9999999999;">
+    {% include "nav.html" %}
+    <div class="container-xxl py-5 bg-dark hero-header mb-5">
+        <div class="container my-5 py-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-3 text-white animated slideInLeft">Mangrove Identification<br>Area</h1>
+                    <p class="text-white animated slideInLeft mb-4 pb-2">Website untuk memberikan informasi semua hal terkait mangrove. Identifikasi lahan mangrove, dan lain-lain. Its all about Mangrove</p>
+                    <a href="{% url 'mang_wiki' %}" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Selengkapnya</a>
+                </div>
+                <div class="col-lg-6 text-center text-lg-end overflow-hidden">
+                    <img class="img-fluid" src="{% static 'img/hero.png' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Navbar & Hero End -->

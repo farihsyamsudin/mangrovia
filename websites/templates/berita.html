@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+{% include "navbar_page.html" %}
+<div class="container-xxl pb-5">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+      <h5 class="section-title ff-secondary text-center text-primary fw-normal">Berita</h5>
+      <h1 class="mb-5">Berita diambil dari sumber media online</h1>
+    </div>
+    
+    <div class="container">
+        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; ">
+            
+            {% for berita in beritas  %}
+            <div class="card" style="width: 18rem; box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75);
+            -webkit-box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75);
+            -moz-box-shadow: 7px 7px 22px -9px rgba(28,28,28,0.75)">
+                <img class="card-img-top" src="{{berita.image_src}}" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text" >{{berita.judul_berita}}</p>
+                  <p style="font-size: 12px; color: #94a3b8;">{{berita.tanggal_waktu}}</p>
+                  <a href="{{berita.link_berita}}" target="_blank" rel="noreferrer noopener">
+                    <button style="border-radius: 6px;" class="btn btn-primary">Selengkapnya</button>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
+{% endblock  %}
