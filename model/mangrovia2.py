@@ -1,7 +1,5 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier, export_text
-import matplotlib.pyplot as plt
-from sklearn.tree import plot_tree
 from sklearn.model_selection import train_test_split
 from joblib import dump
 

@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from joblib import load
 import pandas as pd
+import os
 # from roboflow import Roboflow
-model, tree_rules, accuracy = load('./model/modelMangrovia.sav')
 # from django.core.files.storage import default_storage
 # import os
 # from django.conf import settings
+
+current_directory = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(current_directory, '../model/modelMangrovia.sav')
+model, tree_rules, accuracy = load(model_path)
 
 # Create your views here.
 
