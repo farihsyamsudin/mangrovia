@@ -39,9 +39,6 @@ def predict_mangrove(request):
 
         return render(request, 'predict.html', data)
     else:
-
-        print(tree_rules)
-
         data = {
             "heading" : "Identifikasi Lahan",
             "tree_rules" : tree_rules,
