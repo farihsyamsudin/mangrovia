@@ -15,7 +15,7 @@
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
-                <h6>Pilih gambar yang akan anda identifikasi :</h6>
+                <h6>Pilih gambar yang akan anda identifikasi (Daun, akar, pohon utuh) :</h6>
                 <input name="gambar_mangrove" accept=".jpg, .png, .jpeg" type="file" class="form-control" id="inputGroupFile01">
             </div>
             <button class="btn btn-secondary">Predict!</button>
@@ -25,8 +25,42 @@
 
     <br>
 
-    {% if hasil %}
-      Rekomendasi Jenis Mangrove : {{hasil}}
+    
+    {% if prediction %}
+        <script>
+            const summonSwalNotif = (title, text, icon) => {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: icon
+                });
+            }
+
+            let text_to_display = ""
+            let icon = ""
+            const jenis_mangrove = `{{prediction.predictions.0.class}}`
+            const accuracy = `{{prediction.predictions.0.confidence}}%`
+            
+        </script>
+
+        {% if not prediction.predictions %}
+            <script>
+                text_to_display = `Kami tidak mendeteksi adanya mangrove dalam gambar yang anda masukkan / database kami tidak mengenali adanya mangrove dalam gambar tersebut`
+                icon = "error"
+                summonSwalNotif("Hasil Analisis", text_to_display, icon)
+            </script>
+
+            {% else %}
+
+            <script>
+                text_to_display = `Jenis mangrove yang ada pada foto adalah ${jenis_mangrove}. Akurasi : ${accuracy}`
+                icon = "success"
+                summonSwalNotif("Hasil Analisis", text_to_display, icon)
+            </script>
+
+        {% endif %}
+
+
     {% endif %}
 
 {% endblock %}
