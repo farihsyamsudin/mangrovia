@@ -58,12 +58,20 @@
         zoom: 8.5,
         scrollWheelZoom: false,
     });
-      const tiles = L.tileLayer(
-        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      // const tiles = L.tileLayer(
+      //   "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      //   {
+      //     maxZoom: 19,
+      //     attribution:
+      //       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      //   }
+      // )
+
+      const Esri_WorldImagry = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         {
-          maxZoom: 19,
           attribution:
-            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         }
       ).addTo(peta);
 
@@ -104,8 +112,8 @@
                 <form action="" method="POST">
                     {% csrf_token %}
                     <input hidden value="${feature.properties.class}" name="sst"/><p>Suhu Permukaan Laut daerah ini : ${feature.properties.class}°C</p>
-                    <input hidden value="${feature.properties.salinity_2}" name="salinity"/><p>Salinitas daerah ini : ${feature.properties.salinity_2}mg/l</p>
-                    <input hidden value="${feature.properties.MPT}" name="tss"/><p>Padatan tersuspensi daerah ini : ${feature.properties.MPT}‰</p>
+                    <input hidden value="${feature.properties.salinitas}" name="salinity"/><p>Salinitas daerah ini : ${feature.properties.salinitas}mg/l</p>
+                    <input hidden value="${feature.properties.TSS}" name="tss"/><p>Padatan tersuspensi daerah ini : ${feature.properties.TSS}‰</p>
                     <button class="btn btn-secondary" style="font-size:10px;">
                         Prediksi Mangrove untuk daerah ini!
                     </button>
@@ -125,6 +133,11 @@
         // " Mangrove": mangrove,
         " Parameter": parameter
       };
+
+      // var baseLayers = {
+      //   " Open Street Map": tiles,
+      //   " World Imagery": Esri_WorldImagry
+      // };
 
       L.control.layers(overlays).addTo(peta);
 
